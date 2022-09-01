@@ -69,7 +69,7 @@ app.post('/products/create', isAuthenticated,async (req,res)=>{
 
 });
 
-app.get('/products', isAuthenticated,async (req,res)=>{
+app.get('/products',async (req,res)=>{
 
 
     console.log(req.user);
@@ -77,26 +77,6 @@ app.get('/products', isAuthenticated,async (req,res)=>{
     res.status(200).json(products);
 
 });
-
-app.post('/products/file', (req,res)=>{
-
-    console.log(req.files);
-
-    let filebuffers = [];
-
-    req.files.forEach((file)=>{
-        filebuffers.push({buffer:file.buffer,name:file.originalname})
-    });
-        const payload = {
-            Files:filebuffers,
-        }
-
-        console.log(payload);
-       // const d = fs.readFileSync(req.file.path,{encoding:'base64'});
-        ch.sendToQueue("AWSUPLOADS",Buffer.from(JSON.stringify(payload)))    
-    res.status(200).json({message:"Products are uploaded"});
-
-})
 
 app.post('/products/buy',isAuthenticated,async (req,res)=>{
 
