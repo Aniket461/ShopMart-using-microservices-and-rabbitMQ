@@ -10,9 +10,8 @@ app.use(express.json());
 var ch;
 
 const s3 = new AWS.S3({
-
-    accessKeyId: "AKIA6MRROXHTAUOBVAWJ",
-    secretAccessKey: "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"
+    accessKeyId: "Key Here",
+    secretAccessKey: "Key Here"
 
 });
 mongoose.connect(dbUrl,()=>{
