@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const dbUrl = "mongodb://localhost:27017/shopmartOrder";
+require('dotenv').config();
+
+const dbUrl = process.env.Db_URL;
 const Order = require('./orderSchema');
 const amqp = require('amqplib/callback_api');
 const nodemailer = require('nodemailer');
@@ -17,7 +19,7 @@ mongoose.connect(dbUrl,()=>{
 
 
 
-amqp.connect('amqp://localhost',(err,connection)=>{
+amqp.connect(process.env.AMQP_URL,(err,connection)=>{
     if(err)console.log(err)
     else{
         connection.createChannel((err,channel)=>{

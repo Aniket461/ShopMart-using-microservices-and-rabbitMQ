@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const dbUrl = "mongodb://localhost:27017/shopmartProduct";
+require('dotenv').config()
+const dbUrl = process.env.Db_URL;
 const Product = require('./productSchema');
 const amqp = require('amqplib/callback_api');
 const isAuthenticated = require('../shared-services/Auth');
@@ -10,7 +11,7 @@ const upload = multer();
 const fs = require('fs');
 var ch;
 
-amqp.connect('amqp://localhost',(err,connection)=>{
+amqp.connect(process.env.AMQP_URL,(err,connection)=>{
     if(err)console.log(err)
     else{
         connection.createChannel((err,channel)=>{
@@ -101,7 +102,7 @@ app.post('/products/buy',isAuthenticated,async (req,res)=>{
 
 });
 
-const port = 7070;
+const port = 7071;
 
 app.listen(port,(err)=>{
     if(err) console.log(err)

@@ -3,23 +3,26 @@ const app = express();
 const mongoose = require('mongoose');
 const amqp = require('amqplib/callback_api');
 const AWS = require('aws-sdk');
-const dbUrl = "mongodb://localhost:27017/shopmartProduct";
 const Product = require('./productSchema');
+require('dotenv').config();
 
+console.log(process.env);
+
+
+const dbUrl = process.env.Db_URL;
 app.use(express.json());
 var ch;
 
 const s3 = new AWS.S3({
-
-    accessKeyId: "Key Here",
-    secretAccessKey: "Key Here"
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey
 });
 mongoose.connect(dbUrl,()=>{
     console.log("Database connected!");
 });
 
 
-amqp.connect('amqp://localhost',(err,connection)=>{
+amqp.connect(process.env.AMQP_URL,(err,connection)=>{
     if(err)console.log(err)
     else{
         connection.createChannel((err,channel)=>{
@@ -52,7 +55,7 @@ const UploadImages = async()=>{
 
                  const fileName = data.name.toString().replace(/ /g, "");
         const params = {
-            Bucket: "nodepractice",
+            Bucket: process.env.Bucket,
             Key:fileName,
             Body:Buffer.from(data.buffer)
         }
@@ -92,7 +95,7 @@ const UploadImages = async()=>{
 }
 
 
-const port = 5050;
+const port = 5051 || process.env.PORT;
 
 app.listen(port,()=>{
     console.log(`Shared Services are running on port:${port}`);

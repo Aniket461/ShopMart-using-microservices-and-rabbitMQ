@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('./userSchema')
+require('dotenv').config();
 
-const dbUrl = "mongodb://localhost:27017/shopmartUser";
+const dbUrl = process.env.Db_URL;
 
 app.use(express.json());
 
@@ -32,7 +33,7 @@ app.post('/user/login',async (req,res)=>{
                 name: user.firstname + " " + user.lastname
             }
 
-            jwt.sign(payload,"secret",(err,token)=>{
+            jwt.sign(payload,process.env.JWT_SECRET,(err,token)=>{
                 if(err) res.status(500).json({"message":err});
                 else{
             res.status(200).json({"user":user,"token":token});

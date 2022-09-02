@@ -1,14 +1,15 @@
 const express = require('express');
 const app = express();
+require('dotenv').config();
 const mongoose = require('mongoose');
-const dbUrl = "mongodb://localhost:27017/shopmartOrder";
+const dbUrl = process.env.Db_URL;
 const Order = require('./orderSchema');
 const amqp = require('amqplib/callback_api');
 const isAuthenticated = require('../shared-services/Auth');
 
 var ch;
 
-amqp.connect('amqp://localhost',(err,connection)=>{
+amqp.connect(process.env.AMQP_URL,(err,connection)=>{
     if(err)console.log(err)
     else{
         connection.createChannel((err,channel)=>{
@@ -40,7 +41,6 @@ amqp.connect('amqp://localhost',(err,connection)=>{
             total_Price: order.total_Price,
             isConfirmed:true
         });
-
         await newOrder.save()
         console.log("========================== ORDER START =====================");
         console.log(newOrder);
@@ -74,7 +74,7 @@ app.get('/order/', isAuthenticated,async (req,res)=>{
 
 })
 
-const port = 8080;
+const port = 8082;
 
 app.listen(port,(err)=>{
     if(err) console.log(err)
