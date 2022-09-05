@@ -6,9 +6,6 @@ const AWS = require('aws-sdk');
 const Product = require('./productSchema');
 require('dotenv').config();
 
-console.log(process.env);
-
-
 const dbUrl = process.env.Db_URL;
 app.use(express.json());
 var ch;
